@@ -67,6 +67,9 @@ func ThreadsafePlanner(ctx context.Context) fft.Planner {
 		direction fft.Direction,
 		opts interface{},
 	) (fft.Plan, error) {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
 
 		var (
 			wg   = sync.WaitGroup{}

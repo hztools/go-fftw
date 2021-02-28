@@ -46,6 +46,9 @@ func TestThreadsafeFFT(t *testing.T) {
 	assert.Equal(t, sdr.ErrDstTooSmall, err)
 
 	cancel()
+
+	_, err = planner(iq, freq, fft.Backward, nil)
+	assert.Equal(t, context.Canceled, err)
 }
 
 // vim: foldmethod=marker
