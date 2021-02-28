@@ -61,6 +61,10 @@ func (p realPlan) Close() error {
 	return nil
 }
 
+// RealPlan is the same thing to an fft.Plan, but I also don't want to have
+// anyone confuse this for an fft.Plan once returned. As such I'm making a new
+// type to make it less confusing in docstrings, even though this is the same
+// type interface. D'oh.
 type RealPlan interface {
 	Transform() error
 	Close() error

@@ -81,10 +81,6 @@ func Plan(
 	direction fft.Direction,
 	opts interface{},
 ) (fft.Plan, error) {
-	if err := verifyMainThread(); err != nil {
-		return nil, err
-	}
-
 	switch direction {
 	case fft.Forward:
 		if len(frequency) < len(iq) {
