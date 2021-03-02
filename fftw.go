@@ -51,19 +51,10 @@ type plan struct {
 	backward  bool
 }
 
-func scaleSamples(s []complex64, scaler float32) {
-	for x := range s {
-		s[x] = complex(
-			real(s[x])/scaler,
-			imag(s[x])/scaler,
-		)
-	}
-}
-
 func (p plan) Transform() error {
 	C.fftwf_execute(p.fftwPlan)
 	if p.opts|OptNoScale != 0 {
-		scaleSamples(p.iq, float32(len(p.iq)))
+		p.iq.Scale(1 / float32(len(p.iq)))
 	}
 	return nil
 }
