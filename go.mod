@@ -4,6 +4,6 @@ go 1.15
 
 require (
 	github.com/stretchr/testify v1.7.0
-	hz.tools/rf v0.0.5
-	hz.tools/sdr v0.0.0-20200924134717-aca41b35cb56
+	hz.tools/rf v0.0.7
+	hz.tools/sdr v0.0.0-20210302032716-b81a36232d7e
 )
