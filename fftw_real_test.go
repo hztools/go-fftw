@@ -23,12 +23,20 @@ package fftw_test
 import (
 	"github.com/stretchr/testify/assert"
 	"math"
+	"math/cmplx"
 	"testing"
 
 	"hz.tools/fftw"
 	"hz.tools/rf"
 	"hz.tools/sdr/fft"
 )
+
+var tau = math.Pi * 2
+
+type testFrequencies struct {
+	Frequency rf.Hz
+	Index     int
+}
 
 func generateRealCw(buf []float32, freq rf.Hz, sampleRate int, phase float64) {
 	var (
@@ -37,7 +45,7 @@ func generateRealCw(buf []float32, freq rf.Hz, sampleRate int, phase float64) {
 
 	for i := range buf {
 		now := float64(i) / float64(sampleRate)
-		buf[i] = float32(math.Sin(Tau*carrierFreq*now + phase))
+		buf[i] = float32(math.Sin(tau*carrierFreq*now + phase))
 	}
 }
 
@@ -59,12 +67,12 @@ func TestForwardRealFFT(t *testing.T) {
 		assert.NoError(t, plan.Close())
 
 		var (
-			powerMax float32 = 0
+			powerMax float64 = 0
 			powerI   int     = -1
 		)
-		power := make([]float32, len(cw))
+		power := make([]float64, len(cw))
 		for i := range power {
-			power[i] = magnitude(out[i])
+			power[i] = cmplx.Abs(complex128(out[i]))
 			if power[i] > powerMax {
 				powerMax = power[i]
 				powerI = i

@@ -22,33 +22,16 @@ package fftw_test
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
 	"testing"
 
 	"hz.tools/fftw"
-	// "hz.tools/rf"
-	"hz.tools/sdr"
-	"hz.tools/sdr/fft"
+	"hz.tools/sdr/fft/fftest"
 )
 
 func TestThreadsafeFFT(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
-	planner := fftw.ThreadsafePlanner(ctx)
-
-	iq := make(sdr.SamplesC64, 1024)
-	freq := make([]complex64, 128)
-	_, err := planner(iq, freq, fft.Forward, nil)
-	assert.Equal(t, sdr.ErrDstTooSmall, err)
-
-	iq = make(sdr.SamplesC64, 128)
-	freq = make([]complex64, 1024)
-	_, err = planner(iq, freq, fft.Backward, nil)
-	assert.Equal(t, sdr.ErrDstTooSmall, err)
-
-	cancel()
-
-	_, err = planner(iq, freq, fft.Backward, nil)
-	assert.Equal(t, context.Canceled, err)
+	defer cancel()
+	fftest.Run(t, fftw.ThreadsafePlanner(ctx))
 }
 
 // vim: foldmethod=marker

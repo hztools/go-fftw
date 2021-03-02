@@ -21,126 +21,14 @@
 package fftw_test
 
 import (
-	"github.com/stretchr/testify/assert"
-	"math"
 	"testing"
 
 	"hz.tools/fftw"
-	"hz.tools/rf"
-	"hz.tools/sdr"
-	"hz.tools/sdr/fft"
+	"hz.tools/sdr/fft/fftest"
 )
 
-var Tau = math.Pi * 2
-
-func generateCw(buf sdr.SamplesC64, freq rf.Hz, sampleRate int, phase float64) {
-	var (
-		carrierFreq float64 = float64(freq)
-	)
-
-	for i := range buf {
-		now := float64(i) / float64(sampleRate)
-		buf[i] = complex64(complex(
-			math.Cos(Tau*carrierFreq*now+phase),
-			math.Sin(Tau*carrierFreq*now+phase),
-		))
-	}
-}
-
-func magnitude(num complex64) float32 {
-	a := complex128(num)
-	return float32(math.Sqrt((real(a) * real(a)) + (imag(a) * imag(a))))
-}
-
-type testFrequencies struct {
-	Frequency rf.Hz
-	Index     int
-}
-
-func TestForwardFFT(t *testing.T) {
-	cwPhase0 := make(sdr.SamplesC64, 1024)
-	out := make([]complex64, 1024)
-
-	for _, tfreq := range []testFrequencies{
-		testFrequencies{Frequency: rf.Hz(10), Index: 0},
-		testFrequencies{Frequency: rf.Hz(900000), Index: 512},
-		testFrequencies{Frequency: rf.Hz(450000), Index: 256},
-		testFrequencies{Frequency: rf.Hz(225000), Index: 128},
-	} {
-		generateCw(cwPhase0, tfreq.Frequency, 1.8e6, 0)
-
-		plan, err := fftw.Plan(cwPhase0, out, fft.Forward, nil)
-		assert.NoError(t, err)
-		assert.NoError(t, plan.Transform())
-		assert.NoError(t, plan.Close())
-
-		var (
-			powerMax float32 = 0
-			powerI   int     = -1
-		)
-		power := make([]float32, cwPhase0.Length())
-		for i := range power {
-			power[i] = magnitude(out[i])
-			if power[i] > powerMax {
-				powerMax = power[i]
-				powerI = i
-			}
-		}
-		assert.Equal(t, tfreq.Index, powerI)
-	}
-}
-
-func TestBackwardFFT(t *testing.T) {
-	for _, bin := range []int{
-		5, 10, 127, 522, 242, 415, 825,
-	} {
-		var err error
-
-		iq := make(sdr.SamplesC64, 1024)
-		freq := make([]complex64, 1024)
-
-		freq[bin] = 1 + 1i
-
-		plan, err := fftw.Plan(iq, freq, fft.Backward, nil)
-		assert.NoError(t, err)
-		assert.NoError(t, plan.Transform())
-		assert.NoError(t, plan.Close())
-
-		freq[bin] = 0 + 0i
-
-		plan, err = fftw.Plan(iq, freq, fft.Forward, nil)
-		assert.NoError(t, err)
-		assert.NoError(t, plan.Transform())
-		assert.NoError(t, plan.Close())
-
-		var (
-			powerMax float32 = 0
-			powerI   int     = -1
-		)
-		power := make([]float32, len(freq))
-		for i := range power {
-			power[i] = magnitude(freq[i])
-			if power[i] > powerMax {
-				powerMax = power[i]
-				powerI = i
-			}
-		}
-
-		assert.Equal(t, bin, powerI)
-	}
-}
-
-func TestMismatchDstFFT(t *testing.T) {
-	iq := make(sdr.SamplesC64, 1024)
-	freq := make([]complex64, 128)
-	_, err := fftw.Plan(iq, freq, fft.Forward, nil)
-	assert.Equal(t, sdr.ErrDstTooSmall, err)
-
-	iq = make(sdr.SamplesC64, 128)
-	freq = make([]complex64, 1024)
-	_, err = fftw.Plan(iq, freq, fft.Backward, nil)
-	assert.Equal(t, sdr.ErrDstTooSmall, err)
-
+func TestFFT(t *testing.T) {
+	fftest.Run(t, fftw.Plan)
 }
 
 // vim: foldmethod=marker
