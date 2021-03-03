@@ -1,5 +1,6 @@
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/mattn/go-pointer v0.0.1/go.mod h1:2zXcozF6qYGgmsG+SeTZz3oAbFLdD3OWqnUbNvJZAlc=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
@@ -13,6 +14,7 @@ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie2QXMNeKRTHCNY2nXvo=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
+gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 hz.tools/rf v0.0.2 h1:VcsWlYqPxKZuKng0/wnx7wp9pJq93pvW0LC0tjM9das=
 hz.tools/rf v0.0.2/go.mod h1:ibSuZy/S7Sz15sZ3212GYP0VIdvhAkIHl5IoCacbmLg=
 hz.tools/rf v0.0.3 h1:Ftddawcv4eFMaT+DbnhmbOHAfQ7/h9Jyc+aw1fNYgks=
@@ -31,3 +33,5 @@ hz.tools/sdr v0.0.0-20210302051723-e63781fc58d3 h1:Z2N7QA24SU3Sbu5FXwTPLxdqZ6kQJ
 hz.tools/sdr v0.0.0-20210302051723-e63781fc58d3/go.mod h1:e2HpOZNGv+DJCV9QxTwT/1vi+KoyX996WN3wx46WnB8=
 hz.tools/sdr v0.0.0-20210302051927-c160b34a77ff h1:979Nq0oZ4Fdf/vc4ZW6PlQMfk+fOLWYtqLoeLoOY0+M=
 hz.tools/sdr v0.0.0-20210302051927-c160b34a77ff/go.mod h1:e2HpOZNGv+DJCV9QxTwT/1vi+KoyX996WN3wx46WnB8=
+hz.tools/sdr v0.0.0-20210303014453-79ec13acd079 h1:isNXgp9VOnEuWHQunq9PzGRHKbQHwYsXh4tWSiWqF1I=
+hz.tools/sdr v0.0.0-20210303014453-79ec13acd079/go.mod h1:YX83xRT5DRUT/ue1zeiCfEJhiEP23m83RSdSg1IotxU=
