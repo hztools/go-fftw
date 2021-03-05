@@ -21,10 +21,11 @@
 package fftw_test
 
 import (
-	"github.com/stretchr/testify/assert"
 	"math"
 	"math/cmplx"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"hz.tools/fftw"
 	"hz.tools/rf"
