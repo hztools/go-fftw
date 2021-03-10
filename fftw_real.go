@@ -38,7 +38,6 @@ type realPlan struct {
 	fftwPlan  C.fftwf_plan
 	data      []float32
 	frequency []complex64
-	opts      opt
 	backward  bool
 }
 
@@ -50,9 +49,7 @@ func realScaleSamples(s []float32, scaler float32) {
 
 func (p realPlan) Transform() error {
 	C.fftwf_execute(p.fftwPlan)
-	if p.opts|OptNoScale != 0 {
-		realScaleSamples(p.data, float32(len(p.data)))
-	}
+	realScaleSamples(p.data, float32(len(p.data)))
 	return nil
 }
 
@@ -76,7 +73,6 @@ func PlanReal(
 	samples []float32,
 	frequency []complex64,
 	direction fft.Direction,
-	opts interface{},
 ) (RealPlan, error) {
 	switch direction {
 	case fft.Forward:
@@ -90,22 +86,15 @@ func PlanReal(
 	}
 
 	var (
-		daPtr   *C.float         = (*C.float)(unsafe.Pointer(&samples[0]))
-		fqPtr   *C.fftwf_complex = (*C.fftwf_complex)(unsafe.Pointer(&frequency[0]))
-		options opt
+		daPtr *C.float         = (*C.float)(unsafe.Pointer(&samples[0]))
+		fqPtr *C.fftwf_complex = (*C.fftwf_complex)(unsafe.Pointer(&frequency[0]))
 	)
-
-	switch opts := opts.(type) {
-	case opt:
-		options = opts
-	}
 
 	switch direction {
 	case fft.Forward:
 		p := C.fftwf_plan_dft_r2c_1d(C.int(len(samples)), daPtr, fqPtr,
 			C.FFTW_ESTIMATE)
 		return realPlan{
-			opts:      options,
 			fftwPlan:  p,
 			data:      samples,
 			frequency: frequency,
@@ -115,7 +104,6 @@ func PlanReal(
 		p := C.fftwf_plan_dft_c2r_1d(C.int(len(frequency)), fqPtr, daPtr,
 			C.FFTW_ESTIMATE)
 		return realPlan{
-			opts:      options,
 			fftwPlan:  p,
 			data:      samples,
 			frequency: frequency,

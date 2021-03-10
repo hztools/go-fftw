@@ -33,7 +33,6 @@ type threadsafePlannerRequest struct {
 	IQ        sdr.SamplesC64
 	Frequency []complex64
 	Direction fft.Direction
-	Opts      interface{}
 	Callback  func(fft.Plan, error)
 }
 
@@ -47,7 +46,7 @@ func threadsafePlannerSidecar(
 	for {
 		select {
 		case req := <-requests:
-			req.Callback(Plan(req.IQ, req.Frequency, req.Direction, req.Opts))
+			req.Callback(Plan(req.IQ, req.Frequency, req.Direction))
 		case <-ctx.Done():
 			return
 		}
@@ -65,7 +64,6 @@ func ThreadsafePlanner(ctx context.Context) fft.Planner {
 		iq sdr.SamplesC64,
 		freq []complex64,
 		direction fft.Direction,
-		opts interface{},
 	) (fft.Plan, error) {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -82,7 +80,6 @@ func ThreadsafePlanner(ctx context.Context) fft.Planner {
 			IQ:        iq,
 			Frequency: freq,
 			Direction: direction,
-			Opts:      opts,
 			Callback: func(cbPlan fft.Plan, cbErr error) {
 				defer wg.Done()
 				plan = cbPlan

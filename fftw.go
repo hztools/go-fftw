@@ -34,28 +34,16 @@ import (
 	"hz.tools/sdr/fft"
 )
 
-type opt int
-
-var (
-	// OptNoScale if passed via `opts`, will leave the values unscaled by the
-	// length of the vector. This means values returned will *not* be between
-	// the range of -1 to +1.
-	OptNoScale opt = 1
-)
-
 type plan struct {
 	fftwPlan  C.fftwf_plan
 	iq        sdr.SamplesC64
 	frequency []complex64
-	opts      opt
 	backward  bool
 }
 
 func (p plan) Transform() error {
 	C.fftwf_execute(p.fftwPlan)
-	if p.opts|OptNoScale != 0 {
-		p.iq.Scale(1 / float32(len(p.iq)))
-	}
+	p.iq.Scale(1 / float32(len(p.iq)))
 	return nil
 }
 
@@ -70,7 +58,6 @@ func Plan(
 	iq sdr.SamplesC64,
 	frequency []complex64,
 	direction fft.Direction,
-	opts interface{},
 ) (fft.Plan, error) {
 	switch direction {
 	case fft.Forward:
@@ -84,22 +71,15 @@ func Plan(
 	}
 
 	var (
-		iqPtr   *C.fftwf_complex = (*C.fftwf_complex)(unsafe.Pointer(&iq[0]))
-		fqPtr   *C.fftwf_complex = (*C.fftwf_complex)(unsafe.Pointer(&frequency[0]))
-		options opt
+		iqPtr *C.fftwf_complex = (*C.fftwf_complex)(unsafe.Pointer(&iq[0]))
+		fqPtr *C.fftwf_complex = (*C.fftwf_complex)(unsafe.Pointer(&frequency[0]))
 	)
-
-	switch opts := opts.(type) {
-	case opt:
-		options = opts
-	}
 
 	switch direction {
 	case fft.Forward:
 		p := C.fftwf_plan_dft_1d(C.int(iq.Length()), iqPtr, fqPtr,
 			C.FFTW_FORWARD, C.FFTW_ESTIMATE)
 		return plan{
-			opts:      options,
 			fftwPlan:  p,
 			iq:        iq,
 			frequency: frequency,
@@ -109,7 +89,6 @@ func Plan(
 		p := C.fftwf_plan_dft_1d(C.int(len(frequency)), fqPtr, iqPtr,
 			C.FFTW_BACKWARD, C.FFTW_ESTIMATE)
 		return plan{
-			opts:      options,
 			fftwPlan:  p,
 			iq:        iq,
 			frequency: frequency,

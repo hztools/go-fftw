@@ -62,7 +62,7 @@ func TestForwardRealFFT(t *testing.T) {
 	} {
 		generateRealCw(cw, tfreq.Frequency, 1.8e6, 0)
 
-		plan, err := fftw.PlanReal(cw, out, fft.Forward, nil)
+		plan, err := fftw.PlanReal(cw, out, fft.Forward)
 		assert.NoError(t, err)
 		assert.NoError(t, plan.Transform())
 		assert.NoError(t, plan.Close())
