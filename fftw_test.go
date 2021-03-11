@@ -24,11 +24,11 @@ import (
 	"testing"
 
 	"hz.tools/fftw"
-	"hz.tools/sdr/fft/fftest"
+	"hz.tools/sdr/testutils"
 )
 
 func TestFFT(t *testing.T) {
-	fftest.Run(t, fftw.Plan)
+	testutils.TestFFT(t, fftw.Plan)
 }
 
 // vim: foldmethod=marker

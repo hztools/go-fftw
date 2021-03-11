@@ -25,13 +25,13 @@ import (
 	"testing"
 
 	"hz.tools/fftw"
-	"hz.tools/sdr/fft/fftest"
+	"hz.tools/sdr/testutils"
 )
 
 func TestThreadsafeFFT(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	fftest.Run(t, fftw.ThreadsafePlanner(ctx))
+	testutils.TestFFT(t, fftw.ThreadsafePlanner(ctx))
 }
 
 // vim: foldmethod=marker
