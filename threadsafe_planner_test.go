@@ -34,4 +34,10 @@ func TestThreadsafeFFT(t *testing.T) {
 	testutils.TestFFT(t, fftw.ThreadsafePlanner(ctx))
 }
 
+func BenchmarkThreadsafeFFT(b *testing.B) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	testutils.BenchmarkFFT(b, fftw.ThreadsafePlanner(ctx))
+}
+
 // vim: foldmethod=marker

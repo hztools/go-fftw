@@ -31,4 +31,8 @@ func TestFFT(t *testing.T) {
 	testutils.TestFFT(t, fftw.Plan)
 }
 
+func BenchmarkFFT(b *testing.B) {
+	testutils.BenchmarkFFT(b, fftw.Plan)
+}
+
 // vim: foldmethod=marker
