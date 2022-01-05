@@ -20,8 +20,7 @@
 
 package fftw
 
-// #cgo linux LDFLAGS: -lfftw3f -lm
-// #cgo linux CFLAGS:
+// #cgo pkg-config: fftw3f
 //
 // #include <fftw3.h>
 import "C"
