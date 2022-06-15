@@ -51,7 +51,7 @@ func (p plan) Close() error {
 	return nil
 }
 
-// Plan will create a hz.tools/sdr/fft.Plan to be used to preform
+// Plan will create a hz.tools/sdr/fft.Plan to be used to perform
 // frequency-to-time or time-to-frequency conversions of complex data.
 func Plan(
 	iq sdr.SamplesC64,

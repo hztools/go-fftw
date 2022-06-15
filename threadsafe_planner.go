@@ -55,7 +55,7 @@ func threadsafePlannerSidecar(
 
 // ThreadsafePlanner will span a goroutine, lock to a single thread,
 // and conduct all FFT planning on that thread. This must be used in
-// places where concurency is a requirement.
+// places where concurrency is a requirement.
 func ThreadsafePlanner(ctx context.Context) fft.Planner {
 	chn := make(chan threadsafePlannerRequest, 0)
 	go threadsafePlannerSidecar(ctx, chn)
